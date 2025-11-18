@@ -1,0 +1,23 @@
+{
+  "name": "lasani-lead-capture",
+  "version": "1.0.0",
+  "description": "Lead capture and management system for LasaniDesigns",
+  "scripts": {
+    "dev": "concurrently \"npm run api\" \"npm run admin\"",
+    "api": "cd backend && python app.py",
+    "admin": "cd admin-dashboard && npm run dev",
+    "test": "npm run test:api && npm run test:admin",
+    "test:api": "cd backend && python -m pytest tests/",
+    "test:admin": "cd admin-dashboard && npm test",
+    "build": "npm run build:admin",
+    "build:admin": "cd admin-dashboard && npm run build",
+    "deploy:dev": "amplify push --envName dev",
+    "deploy:prod": "amplify push --envName prod",
+    "setup": "npm run setup:api && npm run setup:admin",
+    "setup:api": "cd backend && pip install -r requirements.txt",
+    "setup:admin": "cd admin-dashboard && npm install"
+  },
+  "devDependencies": {
+    "concurrently": "^7.6.0"
+  }
+}

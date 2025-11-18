@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Contact Form - Lead Capture</title>
+</head>
+<body>
+    <form id="contactForm">
+        <input type="text" name="name" placeholder="Your Name" required>
+        <input type="email" name="email" placeholder="Your Email" required>
+        <input type="tel" name="phone" placeholder="Phone Number">
+        <textarea name="message" placeholder="Your Message"></textarea>
+        <button type="submit">Send Message</button>
+    </form>
+
+    <script>
+    document.getElementById('contactForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const formData = new FormData(e.target);
+        const leadData = {
+            name: formData.get('name'),
+            email: formData.get('email'),
+            phone: formData.get('phone'),
+            source: 'website',
+            message: formData.get('message')
+        };
+        
+        try {
+            const response = await fetch('http://localhost:5000/api/leads', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(leadData)
+            });
+            
+            if (response.ok) {
+                alert('Thank you! Your message has been sent.');
+                e.target.reset();
+            }
+        } catch (error) {
+            alert('Error sending message. Please try again.');
+        }
+    });
+    </script>
+</body>
+</html>

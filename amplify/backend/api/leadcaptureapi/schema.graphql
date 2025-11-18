@@ -1,0 +1,253 @@
+type Lead @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  
+  # Contact Information
+  name: String!
+  email: AWSEmail!
+  phone: AWSPhone
+  
+  # Lead Source & Attribution
+  source: LeadSource!
+  campaign: String
+  medium: String
+  content: String
+  referrer: String
+  
+  # Project Details
+  projectType: ProjectType
+  revenueStream: RevenueStream
+  serviceCategory: ServiceCategory
+  serviceCode: ServiceCode
+  serviceRequired: String  # Free text for specific requirements
+  location: String
+  timeline: Timeline
+  budget: BudgetRange
+  requirements: String
+  
+  # Lead Scoring & Status
+  score: Int
+  priority: Priority
+  status: LeadStatus!
+  
+  # Tracking & Analytics
+  ipAddress: String
+  userAgent: String
+  sessionId: String
+  
+  # Timestamps
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+  
+  # Relationships
+  activities: [Activity] @hasMany
+  notes: [Note] @hasMany
+}
+
+type Activity @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  leadId: ID! @index(name: "byLead")
+  
+  type: ActivityType!
+  description: String!
+  outcome: String
+  
+  createdAt: AWSDateTime!
+  createdBy: String
+  
+  lead: Lead @belongsTo
+}
+
+type Note @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  leadId: ID! @index(name: "byLead")
+  
+  content: String!
+  isPrivate: Boolean
+  
+  createdAt: AWSDateTime!
+  createdBy: String
+  
+  lead: Lead @belongsTo
+}
+
+type Analytics @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  
+  # Metrics by Source
+  source: LeadSource!
+  date: AWSDate!
+  
+  # Counts
+  totalLeads: Int!
+  qualifiedLeads: Int!
+  convertedLeads: Int!
+  
+  # Revenue
+  totalValue: Float
+  averageValue: Float
+  
+  # Performance
+  conversionRate: Float
+  responseTime: Float
+}
+
+# Enums
+enum LeadSource {
+  WEBSITE
+  FACEBOOK
+  INSTAGRAM
+  LINKEDIN
+  TWITTER
+  WHATSAPP
+  GOOGLE_ADS
+  EMAIL
+  REFERRAL
+  DIRECT
+}
+
+# Revenue Streams
+enum RevenueStream {
+  ARCH    # Architecture Projects
+  CIV     # Civil/Structural/MEP Projects  
+  INT     # Interior Design Projects
+  FM      # Facility Management Services
+}
+
+# Service Categories
+enum ServiceCategory {
+  # Architecture
+  ARCH_CORE     # Core Architecture Services
+  ARCH_VAL      # Value-Added Architecture
+  ARCH_NIC      # Niche Architecture
+  
+  # Civil/Structural/MEP
+  CIV_CORE      # Core Civil Services
+  CIV_VAL       # Value-Added Civil
+  CIV_NIC       # Niche Civil
+  
+  # Interior Design
+  INT_CORE      # Core Interior Services
+  INT_VAL       # Value-Added Interior
+  INT_NIC       # Niche Interior
+  
+  # Facility Management
+  FM_CORE       # Core FM (Soft & Hard)
+  FM_SPEC       # Specialized FM
+  FM_AMC        # FM Annual Contracts
+}
+
+# Specific Services
+enum ServiceCode {
+  # Architecture Core
+  ARCH_001      # Architectural Design (Concept to Construction Documents)
+  ARCH_002      # Building Code Compliance & Permitting
+  ARCH_003      # Site Planning & Feasibility Analysis
+  ARCH_004      # Construction Documentation & Tendering
+  ARCH_005      # Construction Administration (Site Supervision)
+  
+  # Architecture Value-Added
+  ARCH_006      # Integrated Structural & MEP Engineering
+  ARCH_007      # Sustainability & Green Building Consulting
+  ARCH_008      # Integrated Interior Design & Space Planning
+  ARCH_009      # Master Planning & Urban Design
+  ARCH_010      # Heritage Conservation & Adaptive Reuse
+  ARCH_011      # 3D Visualization & VR Presentations
+  ARCH_012      # Project Management (PMC) Services
+  
+  # Architecture Niche
+  ARCH_013      # High-Rise & Specialized Structures Design
+  ARCH_014      # Healthcare & Laboratory Architecture
+  ARCH_015      # Sustainable & Net-Zero Design
+  ARCH_016      # Parametric Design & Digital Fabrication
+  ARCH_017      # Ultra-Luxury & Bespoke Design
+  ARCH_018      # Urban Planning & Smart City Consulting
+  
+  # Civil Core
+  CIV_001       # General Contracting (Building Construction)
+  CIV_002       # Project Management & Site Supervision
+  CIV_003       # Structural & Civil Works Execution
+  CIV_004       # MEP Installation Coordination
+  CIV_005       # Finishing & Fit-Out Works
+  CIV_006       # Quality Control & Compliance (Inspections)
+  
+  # Interior Core
+  INT_001       # Space Planning & Conceptual Design
+  INT_002       # Material & Finish Selection
+  INT_003       # FF&E Design/Selection
+  INT_004       # Interior Detailing & Documentation
+  INT_005       # Project Implementation Oversight
+  
+  # Facility Management Core
+  FM_001        # Cleaning & Housekeeping Services
+  FM_002        # Sanitization & Disinfection Services
+  FM_021        # Building Fabric Annual Maintenance Contract
+  FM_026        # Comprehensive Facility Management AMC
+}
+
+# Project Types
+enum ProjectType {
+  RESIDENTIAL_APARTMENT
+  RESIDENTIAL_VILLA
+  RESIDENTIAL_TOWNHOUSE
+  COMMERCIAL_OFFICE
+  COMMERCIAL_RETAIL
+  COMMERCIAL_WAREHOUSE
+  HOSPITALITY_HOTEL
+  HOSPITALITY_RESTAURANT
+  HEALTHCARE_HOSPITAL
+  HEALTHCARE_CLINIC
+  EDUCATIONAL_SCHOOL
+  EDUCATIONAL_UNIVERSITY
+  INDUSTRIAL_FACTORY
+  INDUSTRIAL_LABORATORY
+  INFRASTRUCTURE_ROADS
+  INFRASTRUCTURE_UTILITIES
+  MIXED_USE
+  RENOVATION
+  RESTORATION
+  OTHER
+}
+
+enum Timeline {
+  IMMEDIATE
+  SHORT_TERM
+  MEDIUM_TERM
+  LONG_TERM
+  PLANNING
+}
+
+enum BudgetRange {
+  UNDER_10L
+  L10_25L
+  L25_50L
+  L50_100L
+  ABOVE_100L
+  NOT_DISCLOSED
+}
+
+enum Priority {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
+}
+
+enum LeadStatus {
+  NEW
+  CONTACTED
+  QUALIFIED
+  PROPOSAL_SENT
+  NEGOTIATING
+  WON
+  LOST
+  NURTURING
+}
+
+enum ActivityType {
+  CALL
+  EMAIL
+  MEETING
+  PROPOSAL
+  FOLLOW_UP
+  SITE_VISIT
+}

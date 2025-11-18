@@ -1,0 +1,39 @@
+version: '3.8'
+services:
+  api:
+    build: ./backend
+    ports:
+      - "5000:5000"
+    environment:
+      - DATABASE_URL=sqlite:///leads_seo.db
+      - FLASK_ENV=development
+    volumes:
+      - ./backend:/app
+      - ./backend/instance:/app/instance
+    
+  admin:
+    build: ./admin-dashboard
+    ports:
+      - "3000:3000"
+    environment:
+      - REACT_APP_API_URL=http://localhost:5000
+      - NODE_ENV=development
+    volumes:
+      - ./admin-dashboard:/app
+      - /app/node_modules
+    depends_on:
+      - api
+  
+  dynamodb-local:
+    image: amazon/dynamodb-local:latest
+    ports:
+      - "8000:8000"
+    command: ["-jar", "DynamoDBLocal.jar", "-sharedDb", "-inMemory"]
+    
+  test-runner:
+    build: ./tests
+    volumes:
+      - .:/workspace
+    depends_on:
+      - api
+      - admin

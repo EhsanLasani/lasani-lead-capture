@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>LasaniDesigns Integration Test</title>
+</head>
+<body>
+    <h1>LasaniDesigns Contact Form Test</h1>
+    
+    <form id="testForm">
+        <input type="text" name="name" placeholder="Full Name" required><br><br>
+        <input type="email" name="email" placeholder="Email Address" required><br><br>
+        <input type="tel" name="phone" placeholder="Phone Number" required><br><br>
+        
+        <select name="projectType" required>
+            <option value="">Select project type</option>
+            <option value="residential-apartment">Residential - Apartment</option>
+            <option value="residential-villa">Residential - Villa/Bungalow</option>
+            <option value="commercial-office">Commercial - Office</option>
+            <option value="commercial-retail">Commercial - Retail</option>
+            <option value="hospitality">Hospitality</option>
+            <option value="renovation">Renovation/Refurbishment</option>
+            <option value="other">Other</option>
+        </select><br><br>
+        
+        <select name="revenueStream" required>
+            <option value="">Select Service Stream</option>
+            <option value="ARCH">Architecture Projects</option>
+            <option value="INT">Interior Design Projects</option>
+            <option value="CIV">Civil/Structural/MEP Projects</option>
+            <option value="FM">Facility Management Services</option>
+        </select><br><br>
+        
+        <select name="serviceCategory" required>
+            <option value="">Select Service Category</option>
+            <optgroup label="Architecture">
+                <option value="ARCH_CORE">Core Architecture Services</option>
+                <option value="ARCH_VAL">Value-Added Architecture</option>
+                <option value="ARCH_NIC">Niche Architecture</option>
+            </optgroup>
+            <optgroup label="Interior Design">
+                <option value="INT_CORE">Core Interior Services</option>
+                <option value="INT_VAL">Value-Added Interior</option>
+                <option value="INT_NIC">Niche Interior</option>
+            </optgroup>
+            <optgroup label="Civil/MEP">
+                <option value="CIV_CORE">Core Civil Services</option>
+                <option value="CIV_VAL">Value-Added Civil</option>
+                <option value="CIV_NIC">Niche Civil</option>
+            </optgroup>
+            <optgroup label="Facility Management">
+                <option value="FM_CORE">Core FM Services</option>
+                <option value="FM_SPEC">Specialized FM</option>
+                <option value="FM_AMC">FM Annual Contracts</option>
+            </optgroup>
+        </select><br><br>
+        
+        <select name="serviceCode">
+            <option value="">Select Specific Service (Optional)</option>
+            <optgroup label="Architecture Core">
+                <option value="ARCH_001">Architectural Design (Concept to Construction)</option>
+                <option value="ARCH_002">Building Code Compliance & Permitting</option>
+                <option value="ARCH_003">Site Planning & Feasibility Analysis</option>
+            </optgroup>
+            <optgroup label="Interior Core">
+                <option value="INT_001">Space Planning & Conceptual Design</option>
+                <option value="INT_002">Material & Finish Selection</option>
+                <option value="INT_003">FF&E Design/Selection</option>
+            </optgroup>
+            <optgroup label="Civil Core">
+                <option value="CIV_001">General Contracting (Building Construction)</option>
+                <option value="CIV_002">Project Management & Site Supervision</option>
+            </optgroup>
+        </select><br><br>
+        
+        <input type="text" name="location" placeholder="Project Location"><br><br>
+        
+        <select name="timeline">
+            <option value="">Select timeline</option>
+            <option value="immediate">Immediate (Within 1 month)</option>
+            <option value="short">Short-term (1-3 months)</option>
+            <option value="medium">Medium-term (3-6 months)</option>
+            <option value="long">Long-term (6+ months)</option>
+            <option value="planning">Planning stage</option>
+        </select><br><br>
+        
+        <select name="budget">
+            <option value="">Budget Range</option>
+            <option value="under-10">Under ₹10 Lakhs</option>
+            <option value="10-25">₹10-25 Lakhs</option>
+            <option value="25-50">₹25-50 Lakhs</option>
+            <option value="50-100">₹50 Lakhs - 1 Crore</option>
+            <option value="above-100">Above ₹1 Crore</option>
+        </select><br><br>
+        
+        <textarea name="requirements" placeholder="Project Requirements" required></textarea><br><br>
+        <button type="submit">Get Free Consultation</button>
+    </form>
+
+    <script>
+    document.getElementById('testForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const formData = new FormData(e.target);
+        const leadData = {
+            name: formData.get('name'),
+            email: formData.get('email'),
+            phone: formData.get('phone'),
+            source: 'lasanidesigns_website_test',
+            message: `Project: ${formData.get('projectType')}\nService: ${formData.get('serviceRequired')}\nLocation: ${formData.get('location')}\nTimeline: ${formData.get('timeline')}\nBudget: ${formData.get('budget')}\nRequirements: ${formData.get('requirements')}`,
+            project_type: formData.get('projectType'),
+            service_required: formData.get('serviceRequired'),
+            location: formData.get('location'),
+            timeline: formData.get('timeline'),
+            budget: formData.get('budget')
+        };
+
+        try {
+            const response = await fetch('http://localhost:5000/api/leads', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(leadData)
+            });
+
+            if (response.ok) {
+                alert('✅ Lead captured successfully!');
+                e.target.reset();
+            } else {
+                alert('❌ Error capturing lead');
+            }
+        } catch (error) {
+            alert('❌ Network error: ' + error.message);
+        }
+    });
+    </script>
+</body>
+</html>

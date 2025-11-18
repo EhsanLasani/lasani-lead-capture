@@ -1,0 +1,47 @@
+{
+  "lead_record": {
+    "id": "lead_01HKQR8X9M2N3P4Q5R6S7T8U9V",
+    "name": "Rajesh Kumar",
+    "email": "rajesh@example.com",
+    "phone": "+91-9876543210",
+    "source": "FACEBOOK",
+    "campaign": "portfolio_showcase",
+    "medium": "social",
+    "projectType": "RESIDENTIAL_APARTMENT",
+    "serviceRequired": "INTERIOR",
+    "location": "Mumbai, BKC",
+    "timeline": "SHORT_TERM",
+    "budget": "L25_50L",
+    "requirements": "3BHK apartment interior design with modern theme",
+    "score": 85,
+    "priority": "HIGH",
+    "status": "NEW",
+    "ipAddress": "203.192.12.34",
+    "userAgent": "Mozilla/5.0...",
+    "createdAt": "2024-01-15T10:30:00.000Z",
+    "updatedAt": "2024-01-15T10:30:00.000Z"
+  },
+  
+  "activity_record": {
+    "id": "activity_01HKQR8X9M2N3P4Q5R6S7T8U9W",
+    "leadId": "lead_01HKQR8X9M2N3P4Q5R6S7T8U9V",
+    "type": "CALL",
+    "description": "Initial consultation call scheduled",
+    "outcome": "Interested in complete interior package",
+    "createdAt": "2024-01-15T14:30:00.000Z",
+    "createdBy": "sales_manager_01"
+  },
+  
+  "analytics_record": {
+    "id": "analytics_2024-01-15_FACEBOOK",
+    "source": "FACEBOOK",
+    "date": "2024-01-15",
+    "totalLeads": 12,
+    "qualifiedLeads": 8,
+    "convertedLeads": 2,
+    "totalValue": 2500000,
+    "averageValue": 312500,
+    "conversionRate": 0.167,
+    "responseTime": 2.5
+  }
+}
